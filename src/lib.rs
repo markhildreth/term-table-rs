@@ -1004,4 +1004,28 @@ mod test {
             TableCell::new_with_col_span("This is some really really really really really really really really really that is going to wrap to the next line", 2),
         ]));
     }
+
+    #[test]
+    fn correct_default_padding() {
+        let mut table = Table::new();
+        table.separate_rows = false;
+        table.style = TableStyle::simple();
+        table.add_row(Row::new(vec![
+            TableCell::new_with_alignment("A", 1, Alignment::Center),
+            TableCell::new_with_alignment("B", 1, Alignment::Center),
+        ]));
+        table.add_row(Row::new(vec![TableCell::new(1), TableCell::new("1")]));
+        table.add_row(Row::new(vec![TableCell::new(2), TableCell::new("10")]));
+        table.add_row(Row::new(vec![TableCell::new(3), TableCell::new("100")]));
+        let expected = r"+---+-----+
+| A |  B  |
++---+-----+
+| 1 | 1   |
+| 2 | 10  |
+| 3 | 100 |
++---+-----+
+";
+        println!("{}", table.render());
+        assert_eq!(expected, table.render());
+    }
 }
